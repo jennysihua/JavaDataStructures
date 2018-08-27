@@ -1,16 +1,23 @@
-public class MinHeap {
+package src.Heap;
+
+import java.util.Comparator;
+
+public class Heap {
     private int size;
     private int[] heap;
+    private Comparator<Integer> comparator;
 
-    public MinHeap() {
+    public Heap(Comparator<Integer> comp) {
         size = 0;
         heap = new int[100];
+        comparator = comp;
     }
 
-    public MinHeap(int first) {
+    public Heap(int first, Comparator<Integer> comp) {
         size = 1;
         heap = new int[100];
         heap[0] = first;
+        comparator = comp;
     }
 
     public int size() {
@@ -25,7 +32,7 @@ public class MinHeap {
 
     private void swap(int indexChild, int indexParent) {
         //swap up
-        if(heap[indexChild] >= heap[findParent(indexParent)]) {
+        if(comparator.compare(heap[indexChild], heap[indexParent]) >= 0) {
             return;
         }
         int temp = heap[indexChild];
@@ -38,14 +45,13 @@ public class MinHeap {
         //swap down
         if(size < 2) return;
         if(getLeft(indexParent) == size - 1 || getRight(indexParent) == size - 1) return;
-        if(heap[getLeft(indexParent)] >= heap[indexParent] && heap[indexParent] <= heap[getRight(indexParent)]) {
+        if((comparator.compare(heap[getLeft(indexParent)], heap[indexParent]) >= 0) && comparator.compare(heap[getRight(indexParent)], heap[indexParent]) >= 0) {
             return;
         }
-
         int swapIndex;
         if(getRight(indexParent) >= size) {
             swapIndex = getLeft(indexParent);
-        } else if (heap[getRight(indexParent)] > heap[getLeft(indexParent)]) {
+        } else if (comparator.compare(heap[getRight(indexParent)], heap[getLeft(indexParent)]) >= 0) {
             swapIndex = getLeft(indexParent);
         } else {
             swapIndex = getRight(indexParent);
